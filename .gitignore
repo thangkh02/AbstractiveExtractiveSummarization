@@ -3,3 +3,42 @@
 .env
 .env.local
 *.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (optional - uncomment if you want to ignore large data files)
+# *.csv
+# *.json
+
+# Models (keep pt files in git)
+# models/abstractive/*.pt
+# models/extractive/*.safetensors
+
+# Results
+results/outputs/
+*.log
