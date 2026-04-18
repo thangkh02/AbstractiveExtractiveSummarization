@@ -1,238 +1,243 @@
-# Abstractive & Extractive Summarization Using Language Models
+# Tóm Tắt Văn Bản Bằng Mô Hình Ngôn Ngữ - Tiếng Việt
 
-> **Vietnamese Text Summarization using Extractive and Abstractive Methods with Large Language Models**
+> Dự án tóm tắt văn bản tiếng Việt tự động bằng hai phương pháp Extractive (trích xuất) và Abstractive (trừu tượng)
 
-## 📋 Project Overview
+## Giới Thiệu
 
-This project implements and compares two approaches for automatic Vietnamese text summarization:
+Đây là dự án so sánh hai cách tiếp cận cho bài toán tóm tắt văn bản tiếng Việt:
 
-### **Extractive Summarization** (Tóm tắt trích xuất)
-Identifies and extracts important sentences/phrases from the original text.
+### Tóm tắt trích xuất (Extractive Summarization)
+Phương pháp này tìm kiếm và trích xuất các câu, cụm từ quan trọng nhất từ văn bản gốc.
 
-**Methods:**
-- PhoBERT + KMeans/DBSCAN (Unsupervised)
-- PhoBERT + Linear Layer (Supervised)
+Các mô hình sử dụng:
+- PhoBERT + KMeans/DBSCAN (không cần dữ liệu huấn luyện)
+- PhoBERT + Linear Layer (cần dữ liệu huấn luyện)
 
-### **Abstractive Summarization** (Tóm tắt trừu tượng)
-Generates a concise summary by rephrasing and synthesizing the main ideas.
+### Tóm tắt trừu tượng (Abstractive Summarization)
+Phương pháp này tạo ra một bản tóm tắt hoàn toàn mới bằng cách diễn đạt lại ý chính của văn bản.
 
-**Methods:**
-- ViT5 (Zero-shot & Fine-tuned)
-- Llama 3.2 (Zero-shot & Fine-tuned with QLoRA)
+Các mô hình sử dụng:
+- ViT5 (chế độ không huấn luyện và có huấn luyện)
+- Llama 3.2 (chế độ không huấn luyện và có huấn luyện với QLoRA)
 
-## 🎯 Motivation
+## Ý Nghĩa và Ứng Dụng
 
-Vietnamese text summarization is crucial for:
-- **Users:** Save time by quickly understanding main content
-- **Businesses:** Automate information filtering and aggregation
-- **Applications:** News analysis, document management, social media monitoring
+Tóm tắt văn bản tiếng Việt tự động giải quyết nhiều nhu cầu:
+- Người dùng có thể nắm bắt nội dung chính mà không cần đọc hết
+- Doanh nghiệp có thể tự động lọc, tổng hợp thông tin
+- Ứng dụng trong phân tích tin tức, quản lý tài liệu, giám sát mạng xã hội
 
-## 📊 Results & Performance
+## Kết Quả Đạt Được
 
-| Model | ROUGE-1 | ROUGE-2 | ROUGE-L | BLEU |
-|-------|---------|---------|---------|------|
+| Mô Hình | ROUGE-1 | ROUGE-2 | ROUGE-L | BLEU |
+|---------|---------|---------|---------|------|
 | PhoBERT + KMeans | 0.67 | 0.42 | 0.44 | 23 |
 | PhoBERT + DBSCAN | 0.49 | 0.30 | 0.34 | 9 |
 | PhoBERT + Linear | 0.69 | 0.51 | 0.50 | 29.83 |
-| ViT5 (No Fine-tune) | 0.37 | 0.22 | 0.27 | 1.527 |
-| **ViT5 (Fine-tuned)** | **0.71** | **0.49** | **0.50** | **30.11** |
-| Llama 3.2 (No Fine-tune) | 0.61 | 0.43 | 0.43 | 24.15 |
-| **Llama 3.2 (Fine-tuned)** | **0.70** | **0.51** | **0.52** | **35** |
+| ViT5 (không huấn luyện) | 0.37 | 0.22 | 0.27 | 1.527 |
+| ViT5 (có huấn luyện) | 0.71 | 0.49 | 0.50 | 30.11 |
+| Llama 3.2 (không huấn luyện) | 0.61 | 0.43 | 0.43 | 24.15 |
+| Llama 3.2 (có huấn luyện) | 0.70 | 0.51 | 0.52 | 35 |
 
-✅ **Best Models:** Llama 3.2 (Fine-tuned) & ViT5 (Fine-tuned)
+Hai mô hình tốt nhất: Llama 3.2 (có huấn luyện) và ViT5 (có huấn luyện)
 
-## 📁 Project Structure
+## Cấu Trúc Thư Mục
 
 ```
 AbstractiveExtractiveSummarization/
-├── README.md                          # This file
-├── .env.example                       # Environment template
-├── .gitignore                         # Git ignore rules
+├── README.md                          # File này
+├── .env.example                       # Template biến môi trường
+├── .gitignore                         # Các file không theo dõi
+├── requirements.txt                   # Danh sách các thư viện cần cài
 │
-├── Data/                              # Training & test data
+├── Data/                              # Dữ liệu huấn luyện
 │   ├── abstractive_summarization.csv
 │   ├── extractive_summarization.csv
 │   └── oreo_news_summarization_vi_train.csv
 │
-├── Benchmark/                         # Benchmark datasets
-│   ├── abstractive_summarization_benchmark.csv
-│   ├── extractive_summarization_benchmark.csv
-│   └── oreo_summarization_benchmark.csv
+├── notebooks/                         # Các notebook thí nghiệm
+│   ├── extractive/                    # Phương pháp trích xuất
+│   ├── abstractive/                   # Phương pháp trừu tượng
+│   └── llama/                         # Thí nghiệm với Llama
 │
-├── Code/                              # Implementation notebooks
-│   ├── phoBERT_kmean_dbscan.ipynb     # Extractive with KMeans/DBSCAN
-│   ├── phobert-extractive-summarization.ipynb  # Extractive with Linear
-│   ├── phoBERT inference.ipynb        # PhoBERT inference examples
-│   ├── sumarization-vit5.ipynb        # Abstractive with ViT5
-│   ├── oreo-approach-ipynb.ipynb      # OREO algorithm approach
-│   └── best_phobert_extractive.pt     # Pre-trained extractive model
+├── models/                            # Mô hình đã huấn luyện
+│   ├── extractive/
+│   └── abstractive/
 │
-├── Code Llama 3.2 1B/                 # Large Language Model implementations
-│   ├── nh-gi-m-h-nh-llama.ipynb       # Llama Vietnamese summarization
-│   └── llama31 (4).ipynb              # Llama fine-tuning experiments
+├── results/                           # Kết quả đánh giá
+│   └── benchmarks/                    # Dữ liệu benchmark
 │
-└── docs.pdf                           # Project presentation slides
+├── src/                               # Mã lập trình tái sử dụng
+│   └── __init__.py
+│
+├── docs/                              # Tài liệu
+│   ├── SETUP.md                       # Hướng dẫn cài đặt
+│   ├── STRUCTURE.md                   # Giải thích cấu trúc
+│   └── docs.pdf                       # Slide thuyết trình
+│
+└── config/                            # File cấu hình
 ```
 
-## 🚀 Quick Start
+## Bắt Đầu Nhanh
 
-### Prerequisites
+Yêu cầu:
+- Python >= 3.8
+- pip (trình quản lý thư viện Python)
+
+Cài đặt:
 ```bash
-python >= 3.8
 pip install -r requirements.txt
 ```
 
-### Setup Environment
+Thiết lập biến môi trường:
 ```bash
-# Copy environment template
+# Copy file template
 cp .env.example .env
 
-# Add your Hugging Face token
-# Edit .env and set: HF_TOKEN=your_token_here
+# Chỉnh sửa file .env và thêm token từ Hugging Face
+# HF_TOKEN=token_của_bạn
 ```
 
-### Running Models
+Chạy các mô hình:
 
-**Extractive Summarization:**
+Tóm tắt trích xuất:
 ```bash
-jupyter notebook Code/phoBERT_kmean_dbscan.ipynb
-# or
-jupyter notebook Code/phobert-extractive-summarization.ipynb
+jupyter notebook notebooks/extractive/phoBERT_kmean_dbscan.ipynb
+# hoặc
+jupyter notebook notebooks/extractive/phobert-extractive-summarization.ipynb
 ```
 
-**Abstractive Summarization:**
+Tóm tắt trừu tượng:
 ```bash
 # ViT5
-jupyter notebook Code/sumarization-vit5.ipynb
+jupyter notebook notebooks/abstractive/sumarization-vit5.ipynb
 
 # Llama 3.2
-jupyter notebook "Code Llama 3.2 1B/llama31 (4).ipynb"
+jupyter notebook notebooks/llama/llama31\ \(4\).ipynb
 ```
 
-## 📚 Technical Foundations
+## Nền Tảng Kỹ Thuật
 
-### Transformer Architecture
-- **Encoder-only:** BERT, PhoBERT, RoBERTa (understanding focused)
-- **Decoder-only:** T5, ViT5, mT5 (text generation focused)
-- **Encoder-Decoder:** LLaMA, Mistral, GPT-style (versatile)
+Kiến trúc Transformer:
+- Encoder-only: BERT, PhoBERT, RoBERTa (tập trung vào hiểu ngữ nghĩa)
+- Decoder-only: T5, ViT5, mT5 (tập trung vào sinh văn bản)
+- Encoder-Decoder: LLaMA, Mistral, GPT-style (linh hoạt cho nhiều tác vụ)
 
-### Key Techniques
+PhoBERT & BERT:
+- Mô hình BERT được tối ưu cho tiếng Việt
+- Hiểu được ngữ cảnh hai chiều
+- Rất tốt cho trích xuất và phân loại văn bản
 
-#### **BERT & PhoBERT**
-- Vietnamese-optimized BERT model
-- Bidirectional context understanding
-- Excellent for semantic understanding & extraction
+ViT5:
+- Phiên bản tiếng Việt của T5 của Google
+- Kiến trúc Sequence-to-Sequence
+- Được thiết kế để chuyển tất cả bài toán NLP thành dạng text-to-text
 
-#### **ViT5**
-- Vietnamese version of Google's T5
-- Sequence-to-Sequence architecture
-- Text-to-text framework for summarization
+Llama 3.2 (1 Tỷ Tham Số):
+- Mô hình nhẹ, hiệu quả với 1 tỷ tham số
+- Hỗ trợ cửa sổ ngữ cảnh 128K token
+- Được huấn luyện với QLoRA để tiết kiệm bộ nhớ
 
-#### **Llama 3.2 (1B)**
-- Efficient 1 billion parameter model
-- 128K token context window
-- Fine-tuned with QLoRA for reduced memory usage
+QLoRA Fine-tuning:
+- Kỹ thuật kết hợp Low-Rank Adaptation với lượng tử hóa
+- Giảm đáng kể yêu cầu bộ nhớ
+- Vẫn duy trì hiệu suất cao
+- Rất phù hợp cho GPU consumer
 
-#### **QLoRA Fine-tuning**
-- Low-Rank Adaptation with quantization
-- Reduces memory requirements
-- Maintains high performance
-- Ideal for consumer GPUs
+Chỉ Số Đánh Giá:
 
-### Evaluation Metrics
+ROUGE (Recall-Oriented Understudy for Gisting Evaluation):
+- ROUGE-1: So sánh unigram (từ đơn)
+- ROUGE-2: So sánh bigram (cặp từ)  
+- ROUGE-L: Độ dài của dãy con chung dài nhất
 
-**ROUGE (Recall-Oriented Understudy for Gisting Evaluation)**
-- ROUGE-1: Unigram overlap
-- ROUGE-2: Bigram overlap  
-- ROUGE-L: Longest common subsequence
+BLEU (Bilingual Evaluation Understudy):
+- Precision dựa trên n-gram kèm theo hình phạt
+- Phạt những bản tóm tắt quá ngắn so với bản tham chiếu
 
-**BLEU (Bilingual Evaluation Understudy)**
-- N-gram precision with brevity penalty
-- Penalizes overly short summaries
+## Thông Tin Dữ Liệu
 
-## 📖 Dataset Information
+- Dữ liệu huấn luyện: 29.509 mẫu (cho cả trích xuất và trừu tượng)
+- Dữ liệu benchmark: 5.000 mẫu kiểm tra
+- Ngôn ngữ: Tiếng Việt
+- Định dạng: CSV chứa nội dung gốc và bản tóm tắt tham chiếu
 
-- **Training Data:** 29,509 samples (both extractive & abstractive)
-- **Benchmark Data:** 5,000 test samples
-- **Language:** Vietnamese
-- **Format:** CSV with source content and reference summaries
+## Các Công Nghệ Sử Dụng
 
-## 🔧 Technologies & Libraries
+- NLP Models: Transformers (Hugging Face)
+- Deep Learning: PyTorch
+- Fine-tuning: PEFT (Parameter-Efficient Fine-Tuning)
+- Lượng tử hóa: BitsAndBytes
+- Clustering: scikit-learn (KMeans, DBSCAN)
+- Đánh giá: ROUGE, BLEU
+- Xử lý dữ liệu: Pandas, NumPy
 
-- **NLP Models:** Transformers (Hugging Face)
-- **Deep Learning:** PyTorch
-- **Fine-tuning:** PEFT (Parameter-Efficient Fine-Tuning)
-- **Quantization:** BitsAndBytes
-- **Clustering:** scikit-learn (KMeans, DBSCAN)
-- **Evaluation:** ROUGE, BLEU
-- **Data Processing:** Pandas, NumPy
+## Những Phát Hiện Chính
 
-## 📝 Key Findings
+Phương pháp Trích xuất:
+- PhoBERT + Linear Layer: Hiệu suất cân bằng tốt nhất (ROUGE-1: 0.69, BLEU: 29.83)
+- Suy luận nhanh, độ chính xác tin cậy
+- Bị giới hạn chỉ có thể dùng nội dung từ văn bản gốc
 
-✅ **Extractive Methods:**
-- PhoBERT + Linear Layer: Best balanced performance (ROUGE-1: 0.69, BLEU: 29.83)
-- Fast inference, reliable accuracy
-- Limited to existing content
+Phương pháp Trừu tượng (chưa huấn luyện):
+- ViT5 và Llama ở chế độ không huấn luyện có hiệu suất kém
+- Cần phải huấn luyện để hoạt động tốt với tiếng Việt
 
-❌ **Abstractive Methods (Untuned):**
-- ViT5 & Llama zero-shot show lower performance
-- Requires fine-tuning for Vietnamese
+Phương pháp Trừu tượng (đã huấn luyện):
+- Llama 3.2 có huấn luyện: Điểm BLEU cao nhất (35) - độ lưu loát xuất sắc
+- ViT5 có huấn luyện: Hiệu suất cân bằng mạnh (ROUGE-1: 0.71)
+- Tạo ra các bản tóm tắt tự nhiên, ngắn gọn hơn
+- Hiểu rõ hơn về ngữ nghĩa sâu của văn bản
 
-✅ **Abstractive Methods (Fine-tuned):**
-- Llama 3.2 FT: Highest BLEU score (35) - excellent fluency
-- ViT5 FT: Strong balanced performance (ROUGE-1: 0.71)
-- Generate more natural, concise summaries
-- Better semantic understanding
+## Những Điểm Nổi Bật về Kiến Trúc
 
-## 🎓 Architecture Highlights
+Thuật toán OREO:
+- Lựa chọn câu tối ưu bằng cách ước tính kỳ vọng oracle
+- Beam search kèm cắt tỉa để tăng hiệu quả
+- Kỳ vọng được tiền tính toán để hội tụ nhanh hơn
 
-### OREO Algorithm
-- Optimized sentence selection using oracle expectation
-- Beam search with pruning for efficiency
-- Pre-scaled expectation for better convergence
+Clustering cho Trích xuất:
+- KMeans: Xác định k cụm, chọn câu đại diện
+- DBSCAN: Dựa trên mật độ, xử lý tốt hơn với độ dài tóm tắt khác nhau
 
-### Clustering for Extraction
-- **KMeans:** Determines k clusters, selects representative sentences
-- **DBSCAN:** Density-based, handles variable-length summaries better
+## Ví Dụ Sử Dụng
 
-## 📌 Usage Examples
+Xem các notebook riêng lẻ để biết chi tiết:
+- Tải và tiền xử lý dữ liệu
+- Sử dụng mô hình để dự đoán
+- Huấn luyện các mô hình
+- Đánh giá trên dữ liệu benchmark
 
-See individual notebook files for detailed usage:
-- Data loading and preprocessing
-- Model inference
-- Fine-tuning procedures
-- Evaluation on benchmark dataset
+## Đóng Góp
 
-## 🤝 Contributing
+Đây là dự án học tập và nghiên cứu. Nếu bạn có ý kiến cải thiện hoặc phát hiện lỗi, hãy tạo một issue.
 
-This is an academic/research project. For improvements or bug reports, please create an issue.
+## Giấy Phép
 
-## 📄 License
+Dự án này dành cho mục đích giáo dục và nghiên cứu.
 
-This project is for educational and research purposes.
+## Nhóm Phát Triển
 
-## 👥 Project Team
+Dự án Nghiên Cứu Học Thuật
+- Tập trung: Tóm tắt văn bản tiếng Việt
+- Phương pháp: Trích xuất & Trừu tượng
+- Mô hình: PhoBERT, ViT5, Llama 3.2
 
-**Academic Research Project**
-- Focus: Vietnamese Text Summarization
-- Approaches: Extractive & Abstractive
-- Models: PhoBERT, ViT5, Llama 3.2
+## Hỗ Trợ
 
-## 📞 Support
+Nếu có câu hỏi hoặc gặp sự cố:
+1. Kiểm tra notebook liên quan để xem chi tiết triển khai
+2. Xem docs.pdf để hiểu rõ hơn về dự án
+3. Đọc các chú thích trong code và ô markdown
 
-For questions or issues:
-1. Check the relevant notebook for implementation details
-2. Review the `docs.pdf` for project presentation
-3. Examine the code comments and markdown cells
+## Tài Liệu Tham Khảo
 
-## 🔗 Resources
-
-- [PhoBERT](https://github.com/VinAIResearch/PhoBERT)
-- [Hugging Face Models](https://huggingface.co/models)
-- [PEFT for Parameter-Efficient Fine-tuning](https://github.com/huggingface/peft)
-- [ROUGE Evaluation](https://github.com/google-research/rouge)
+- PhoBERT: https://github.com/VinAIResearch/PhoBERT
+- Hugging Face Models: https://huggingface.co/models
+- PEFT for Parameter-Efficient Fine-tuning: https://github.com/huggingface/peft
+- ROUGE Evaluation: https://github.com/google-research/rouge
 
 ---
 
-**Last Updated:** April 19, 2026  
-**Status:** ✅ Active Development
+Lần cập nhật cuối: 19 tháng 4 năm 2026  
+Trạng thái: Đang phát triển tích cực
