@@ -2,6 +2,8 @@
 
 > Dự án tóm tắt văn bản tiếng Việt tự động bằng hai phương pháp Extractive (trích xuất) và Abstractive (trừu tượng)
 
+Xem mô tả tổng quan về dự án tại: [docs.pdf](./docs/docs.pdf)
+
 ## Giới Thiệu
 
 Đây là dự án so sánh hai cách tiếp cận cho bài toán tóm tắt văn bản tiếng Việt:
@@ -19,13 +21,6 @@ Phương pháp này tạo ra một bản tóm tắt hoàn toàn mới bằng cá
 Các mô hình sử dụng:
 - ViT5 (chế độ không huấn luyện và có huấn luyện)
 - Llama 3.2 (chế độ không huấn luyện và có huấn luyện với QLoRA)
-
-## Ý Nghĩa và Ứng Dụng
-
-Tóm tắt văn bản tiếng Việt tự động giải quyết nhiều nhu cầu:
-- Người dùng có thể nắm bắt nội dung chính mà không cần đọc hết
-- Doanh nghiệp có thể tự động lọc, tổng hợp thông tin
-- Ứng dụng trong phân tích tin tức, quản lý tài liệu, giám sát mạng xã hội
 
 ## Kết Quả Đạt Được
 
@@ -78,32 +73,81 @@ AbstractiveExtractiveSummarization/
 └── config/                            # File cấu hình
 ```
 
-## Bắt Đầu Nhanh
+## Hướng Dẫn Cài Đặt 
 
 Yêu cầu:
 - Python >= 3.8
 - pip (trình quản lý thư viện Python)
+- Git (để quản lý phiên bản)
+- GPU hỗ trợ CUDA (tùy chọn nhưng nên có để huấn luyện)
 
-Cài đặt:
+Bước 1: Clone Repository
+
+```bash
+git clone https://github.com/thangkh02/AbstractiveExtractiveSummarization.git
+cd AbstractiveExtractiveSummarization
+```
+
+Bước 2: Tạo Môi Trường Ảo (Khuyến Khích)
+
+Sử dụng venv:
+```bash
+python -m venv venv
+
+# Kích hoạt môi trường ảo
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+```
+
+Hoặc sử dụng conda:
+```bash
+conda create -n summarization python=3.10
+conda activate summarization
+```
+
+Bước 3: Cài Đặt Thư Viện
+
 ```bash
 pip install -r requirements.txt
 ```
 
-Thiết lập biến môi trường:
+Để hỗ trợ GPU (CUDA 12.1):
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+Bước 4: Thiết Lập Biến Môi Trường
+
 ```bash
 # Copy file template
 cp .env.example .env
 
 # Chỉnh sửa file .env và thêm token từ Hugging Face
 # HF_TOKEN=token_của_bạn
+# Lấy token từ: https://huggingface.co/settings/tokens
 ```
 
-Chạy các mô hình:
+Bước 5: Kiểm Tra Cài Đặt
+
+```bash
+# Kiểm tra PyTorch
+python -c "import torch; print(f'PyTorch {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}')"
+
+# Kiểm tra Transformers
+python -c "import transformers; print(f'Transformers {transformers.__version__}')"
+
+# Kiểm tra các thư viện khác
+python -c "import sklearn, pandas, numpy; print('Tất cả thư viện đã cài đặt!')"
+```
+
+Chạy Các Mô Hình:
 
 Tóm tắt trích xuất:
 ```bash
 jupyter notebook notebooks/extractive/phoBERT_kmean_dbscan.ipynb
-# hoặc
+# và 
 jupyter notebook notebooks/extractive/phobert-extractive-summarization.ipynb
 ```
 
@@ -113,8 +157,9 @@ Tóm tắt trừu tượng:
 jupyter notebook notebooks/abstractive/sumarization-vit5.ipynb
 
 # Llama 3.2
-jupyter notebook notebooks/llama/llama31\ \(4\).ipynb
+jupyter notebook notebooks/llama/FinetuneLlama3.2.ipynb
 ```
+
 
 ## Nền Tảng Kỹ Thuật
 
@@ -200,44 +245,36 @@ Clustering cho Trích xuất:
 - KMeans: Xác định k cụm, chọn câu đại diện
 - DBSCAN: Dựa trên mật độ, xử lý tốt hơn với độ dài tóm tắt khác nhau
 
-## Ví Dụ Sử Dụng
 
-Xem các notebook riêng lẻ để biết chi tiết:
-- Tải và tiền xử lý dữ liệu
-- Sử dụng mô hình để dự đoán
-- Huấn luyện các mô hình
-- Đánh giá trên dữ liệu benchmark
 
-## Đóng Góp
+## Tài Liệu Thêm
 
-Đây là dự án học tập và nghiên cứu. Nếu bạn có ý kiến cải thiện hoặc phát hiện lỗi, hãy tạo một issue.
+Để biết thêm chi tiết:
 
-## Giấy Phép
+1. **docs/SETUP.md** - Hướng dẫn cài đặt chi tiết
+   - Cài đặt từng bước
+   - Thiết lập GPU
+   - Khắc phục sự cố
 
-Dự án này dành cho mục đích giáo dục và nghiên cứu.
+2. **docs/STRUCTURE.md** - Giải thích cấu trúc thư mục
+   - Mô tả chi tiết mỗi thư mục
+   - Tình trạng di chuyển file
+   - Bước tiếp theo được kế hoạch
 
-## Nhóm Phát Triển
+3. **docs/docs.pdf** - Slide thuyết trình dự án
+   - Tổng quan dự án
+   - Lý thuyết nền tảng
+   - Kết quả và so sánh
 
-Dự án Nghiên Cứu Học Thuật
-- Tập trung: Tóm tắt văn bản tiếng Việt
-- Phương pháp: Trích xuất & Trừu tượng
-- Mô hình: PhoBERT, ViT5, Llama 3.2
+## Dữ Liệu Và Mô Hình
 
-## Hỗ Trợ
+- **Dữ liệu huấn luyện**: Nằm trong `Data/` (29.509 mẫu cho mỗi phương pháp)
+- **Dữ liệu benchmark**: Nằm trong `results/benchmarks/` (5.000 mẫu kiểm tra)
+- **Mô hình**: Nằm trong `models/{phương pháp}/`
 
-Nếu có câu hỏi hoặc gặp sự cố:
-1. Kiểm tra notebook liên quan để xem chi tiết triển khai
-2. Xem docs.pdf để hiểu rõ hơn về dự án
-3. Đọc các chú thích trong code và ô markdown
 
-## Tài Liệu Tham Khảo
-
-- PhoBERT: https://github.com/VinAIResearch/PhoBERT
-- Hugging Face Models: https://huggingface.co/models
-- PEFT for Parameter-Efficient Fine-tuning: https://github.com/huggingface/peft
-- ROUGE Evaluation: https://github.com/google-research/rouge
 
 ---
 
-Lần cập nhật cuối: 19 tháng 4 năm 2026  
-Trạng thái: Đang phát triển tích cực
+
+
